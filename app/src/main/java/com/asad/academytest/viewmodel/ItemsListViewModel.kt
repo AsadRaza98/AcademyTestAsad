@@ -21,8 +21,11 @@ import java.text.Collator
  * the Compose analog of the original's `@Observable` + `private(set)` design.
  */
 class ItemsListViewModel(
-    initialItems: List<Item> = defaultItems,
+    initialItems: List<Item>,
 ) : ViewModel() {
+
+    // No-arg constructor so `viewModel()` can build it via reflection.
+    constructor() : this(defaultItems)
 
     private val _items = MutableStateFlow(initialItems)
     /** Source-of-truth list, in insertion order. */
