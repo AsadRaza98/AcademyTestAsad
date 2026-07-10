@@ -6,11 +6,8 @@
     <string name="add_item">Aggiungi oggetto</string>
     <string name="empty_title">Nessun oggetto</string>
     <string name="empty_list_description">Aggiungi un oggetto dalla barra in alto.</string>
-    <string name="empty_list_from_top">Aggiungi un oggetto dalla barra in alto.</string>
 
     <!-- Detail screen -->
-    <string name="detail_placeholder_title">Nessun oggetto</string>
-    <string name="detail_placeholder_description">Aggiungi un oggetto dalla lista.</string>
     <string name="section_item">Oggetto</string>
     <string name="field_name">Nome</string>
     <string name="delete_item">Elimina oggetto</string>
