@@ -88,7 +88,10 @@ fun ItemsListScreen(
                         ItemRow(
                             item = item,
                             onToggleFavorite = { onToggleFavorite(item.id) },
-                            modifier = Modifier.clickable { onItemClick(item) },
+                            // Opaque background so the delete layer only shows while swiping.
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.surface)
+                                .clickable { onItemClick(item) },
                         )
                     }
                     HorizontalDivider()
