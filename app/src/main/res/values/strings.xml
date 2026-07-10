@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">AcademyTest</string>
+
+    <!-- List screen -->
+    <string name="items_title">Oggetti</string>
+    <string name="add_item">Aggiungi oggetto</string>
+    <string name="empty_title">Nessun oggetto</string>
+    <string name="empty_list_description">Aggiungi un oggetto dalla barra in alto.</string>
+    <string name="empty_list_from_top">Aggiungi un oggetto dalla barra in alto.</string>
+
+    <!-- Detail screen -->
+    <string name="detail_placeholder_title">Nessun oggetto</string>
+    <string name="detail_placeholder_description">Aggiungi un oggetto dalla lista.</string>
+    <string name="section_item">Oggetto</string>
+    <string name="field_name">Nome</string>
+    <string name="delete_item">Elimina oggetto</string>
+    <string name="back">Indietro</string>
+
+    <!-- Favorite -->
+    <string name="favorite">Preferito</string>
+    <string name="not_favorite">Non preferito</string>
+    <string name="add_to_favorites">Aggiungi ai preferiti</string>
+    <string name="remove_from_favorites">Rimuovi dai preferiti</string>
+
+    <!-- Add item sheet -->
+    <string name="add_title">Aggiungi</string>
+    <string name="new_item_section">Nuovo oggetto</string>
+    <string name="cancel">Annulla</string>
+    <string name="save">Salva</string>
 </resources>
