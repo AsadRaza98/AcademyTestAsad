@@ -1,118 +1,48 @@
-# AcademyTest — Android (Jetpack Compose)
+# AcademyTest — Android
 
-An Android port of a small SwiftUI **item-management** app, built with **Kotlin** and
-**Jetpack Compose**. It displays a sorted list of items — each with a name and a favorite
-state — a detail screen, and an add-item sheet. Changes to an item are reflected everywhere
-in the app automatically.
+A small **item-management** app for Android, built with **Kotlin** and **Jetpack Compose**.
 
-This is the Android equivalent of the SwiftUI exercise at
-[wearebeatcode/AcademyTest2026](https://github.com/wearebeatcode/AcademyTest2026).
+It's an Android version of a SwiftUI app: you get a sorted list of items — each with a name
+and a favorite (star) — a detail screen, and a way to add new items. Marking something as a
+favorite updates everywhere in the app instantly.
 
-## Features
+Original SwiftUI exercise: [wearebeatcode/AcademyTest2026](https://github.com/wearebeatcode/AcademyTest2026).
 
-- Sorted list of items (case-insensitive by name, tie-broken by creation order)
-- Favorite toggle available from both the list row and the detail screen; the change is
-  reflected in both places instantly (single source of truth)
-- Add new items via a modal bottom sheet (auto-focused field, Save disabled until valid)
-- Delete via swipe-to-dismiss on the list, or the destructive action on the detail screen
-- Empty state with a call to action
-- `@Preview` for every UI component and screen
-- Italian UI strings, centralized in `strings.xml`
+## What it does
 
-## Architecture
+- Shows a list of items, sorted alphabetically by name
+- Tap the ⭐ to mark an item as favorite — from the list or the detail screen
+- Tap an item to open its details
+- Add a new item with the **+** button
+- Swipe a row to delete it (or delete from the detail screen)
+- Friendly empty screen when there are no items
 
-MVVM with **unidirectional data flow**, the idiomatic Compose analog of the original's
-SwiftUI `@Observable` + bindings design:
+## How to run it
 
-- **`Item`** — an immutable Kotlin `data class` (the `Identifiable` + `Hashable` analog).
-- **`ItemsListViewModel`** — the single source of truth. Holds the item list and selection
-  as `StateFlow`s and exposes derived `sortedItems` / `selectedItem`. All mutations
-  (`addItem`, `toggleFavorite`, `delete`, `deleteFromDetail`) are methods on the ViewModel.
-- **Composables** — stateless where possible: they receive state (flows down) and raise
-  events via lambdas (flows up). The single ViewModel is shared across the list and detail,
-  so an edit in one place updates the other.
+You'll need **Android Studio**.
 
-Navigation mirrors the original's **selection-driven** model: with no selection the list is
-shown; selecting an item shows the detail; hardware back clears the selection — the way
-`NavigationSplitView` collapses to a stack on a phone.
+1. Open the project in Android Studio and wait for it to finish loading.
+2. Pick an emulator or plug in an Android phone.
+3. Press **Run** ▶️.
 
-### Project structure
+## How it's built
 
-```
-app/src/main/java/com/asad/academytest/
-├── model/
-│   └── Item.kt                 # immutable domain model
-├── viewmodel/
-│   └── ItemsListViewModel.kt   # single source of truth (StateFlow)
-├── ui/
-│   ├── FavoriteButton.kt       # reusable star toggle
-│   ├── ItemRow.kt              # a single list row
-│   ├── ItemsListScreen.kt      # list + swipe-to-delete + top bar
-│   ├── ItemDetailScreen.kt     # detail form + destructive delete
-│   ├── AddItemSheet.kt         # modal bottom sheet to add an item
-│   ├── EmptyState.kt           # reusable "content unavailable" view
-│   └── theme/                  # generated Compose theme
-└── MainActivity.kt             # app wiring (list <-> detail, add sheet)
-```
-
-## SwiftUI → Jetpack Compose mapping
-
-| SwiftUI (original) | Jetpack Compose (this port) |
-| --- | --- |
-| `struct ...: View { var body }` | `@Composable fun ...()` |
-| `#Preview { }` | `@Preview @Composable fun ...()` |
-| `ItemViewModel` (`Identifiable`, `Hashable`) | `Item` (`data class`) |
-| `@Observable class ItemsListViewModel` | `ItemsListViewModel : ViewModel()` exposing `StateFlow` |
-| `@State` (owns model) | `viewModel()` |
-| `@Bindable` / `@Binding` | value in + lambda out (state hoisting) |
-| `NavigationSplitView` | selection-driven list ⟷ detail + `BackHandler` |
-| `List { ForEach }` | `LazyColumn { items(...) }` |
-| `.onDelete` (swipe) | `SwipeToDismissBox` |
-| `.sheet` + `.presentationDetents([.medium])` | `ModalBottomSheet` |
-| `Form` / `Section` | section-titled `Card` |
-| `ContentUnavailableView` | `EmptyState` composable |
-| `LabeledContent` | label/value `Row` |
-| `Image(systemName: "star.fill" / "star")` | `Icons.Filled.Star` / `Icons.Filled.StarBorder` |
-| `localizedCaseInsensitiveCompare` | `java.text.Collator` (SECONDARY strength) |
-| Italian string literals | `res/values/strings.xml` |
-
-## Building & running
-
-Requirements: **Android Studio** (Ladybug or newer) with the Android SDK.
-
-1. Open the project in Android Studio and let Gradle sync.
-2. Select an emulator or a connected device (min SDK 24).
-3. Press **Run**.
-
-Command line:
-
-```bash
-./gradlew assembleDebug   # build the debug APK
-```
+- **Kotlin + Jetpack Compose** for the whole UI.
+- One place holds all the data (`ItemsListViewModel`), so any change — like tapping a star —
+  shows up everywhere at once.
+- Every screen and component has a **Preview**, so you can see it inside Android Studio
+  without running the app.
 
 ## Using AI
 
-This port was built with AI assistance (Claude), used as a pair-programmer rather than a
-code dump:
+I used an AI assistant (Claude) as a pair-programmer while porting this from SwiftUI:
 
-- **Planning:** agreed on the architecture (unidirectional data flow) and a layer-by-layer
-  plan up front, so each commit maps to one coherent piece of the original app.
-- **Incremental generation:** each layer (data model → leaf components → screens → wiring)
-  was generated, **compile-checked with Gradle**, and reviewed before committing.
-- **Evaluating output:** decisions where the AI's first suggestion was adjusted — e.g.
-  choosing a selection-driven layout over pulling in the Navigation library to stay close to
-  the original's model, folding the trivial `AddItemViewModel` into local Compose state, and
-  adding a no-arg ViewModel constructor so `viewModel()` can build it.
+- We planned the app in small pieces and built it one layer at a time.
+- Each piece was checked (it had to build successfully) and reviewed before I committed it.
+- The commit history is intentionally step-by-step, so you can follow how the app came
+  together rather than seeing just the final result.
 
-The commit history is intentionally granular to show how the work evolved.
+## Good to know
 
-## Notes & possible enhancements
-
-- **Persistence:** like the original, state is in-memory and resets on relaunch. A real app
-  would add a repository + persistence (DataStore / Room).
-- **Adaptive layout:** on tablets/foldables, `ListDetailPaneScaffold` (Material 3 adaptive)
-  would show list and detail side-by-side, closer to `NavigationSplitView` on iPad.
-- **Swipe API:** `SwipeToDismissBox` currently uses the (deprecated) `confirmValueChange`
-  callback; it works but could move to the newer dynamic-anchors approach.
-- **Tests:** the ViewModel's logic (sorting, add/delete, re-selection) is a good candidate
-  for unit tests.
+- Data is kept in memory, so it resets when the app restarts (same as the original).
+- On tablets the list and detail could be shown side-by-side — a nice future improvement.
